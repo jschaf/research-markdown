@@ -1,0 +1,164 @@
+% rubber: set engine lualatex
+% rubber: set program lualatex
+\documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$lang$,$endif$$if(papersize)$$papersize$,$endif$$for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+% \setmainfont{TeX Gyre Termes}
+% \setsansfont{TeX Gyre Heros}
+\setmainfont[SmallCapsFeatures={Letters=UppercaseSmallCaps, Scale=1.2}]{Minion Pro}
+\setmonofont{Consolas}
+
+\usepackage{setspace}
+% \setmonofont[Mapping=tex-ansi]{$monofont$}
+
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\usepackage[]{microtype}
+% activate={true,nocompatibility} - activate protrusion and expansion
+% final - enable microtype; use "draft" to disable
+% tracking=true, kerning=true, spacing=true - activate these techniques
+% factor=1100 - add 10% to the protrusion amount (default is 1000)
+% stretch=10, shrink=10 - reduce stretchability/shrinkability (default is 20/20)
+
+\usepackage[margin=1in]{geometry}
+
+\usepackage{longtable,booktabs}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+
+% allow urls to break on hyphens
+\PassOptionsToPackage{hyphens}{url}
+
+\usepackage[unicode=true]{hyperref}
+\hypersetup{breaklinks=true,
+            pdfauthor={$author-meta$},
+            pdftitle={$title-meta$},
+            colorlinks=true,
+            citecolor=$if(citecolor)$$citecolor$$else$blue$endif$,
+            urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
+            linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+$if(links-as-notes)$
+% Make links footnotes instead of hotlinks:
+\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
+$endif$
+$if(strikeout)$
+\usepackage[normalem]{ulem}
+% avoid problems with \sout in headers with hyperref:
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+$endif$
+% \setlength{\parindent}{0pt}
+% \setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+$if(numbersections)$
+\setcounter{secnumdepth}{5}
+$else$
+\setcounter{secnumdepth}{0}
+$endif$
+
+$if(title)$
+\title{$title$}
+$endif$
+$if(subtitle)$
+\subtitle{$subtitle$}
+$endif$
+% Customized
+$if(author)$
+\author{$for(author)$ %
+$if(author.name)$ %
+$author.name$$if(author.affiliation)$\\$author.affiliation$$endif$ %
+$else$ %
+$author$ %
+$endif$ %
+$sep$ \and %
+$endfor$ %
+$endif$ %
+}
+%end customized
+$if(date)$
+\date{$date$}
+$endif$
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+% Custom adds
+\makeatletter
+\def\@maketitle{%
+  \singlespacing
+  \hfill\begin{tabular}{@{}l@{}}%
+  \let \footnote \thanks
+    \@title \\ %
+    \@author \\ %
+    \@date%
+  \end{tabular}%
+  \par
+  \vskip 1.5em}
+\makeatother
+
+\renewcommand\and{\\[\baselineskip]}
+\usepackage{sectsty}
+\allsectionsfont{\centering\normalsize}
+\doublespacing
+\usepackage{ragged2e}
+% Single spaced quote environment
+\expandafter\def\expandafter\quote\expandafter{\quote\small\singlespacing}
+
+% indent first paragraph
+\usepackage{indentfirst}
+
+% end custom adds
+
+\begin{document}
+$if(title)$
+\maketitle
+$endif$
+$if(abstract)$
+\begin{abstract}
+$abstract$
+\end{abstract}
+$endif$
+
+$for(include-before)$
+$include-before$
+
+$endfor$
+$if(toc)$
+{
+\hypersetup{linkcolor=black}
+\setcounter{tocdepth}{$toc-depth$}
+\tableofcontents
+}
+$endif$
+$body$
+$if(natbib)$
+$if(biblio-files)$
+$if(biblio-title)$
+$if(book-class)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
+$endif$
+$endif$
+\bibliography{$biblio-files$}
+
+$endif$
+$endif$
+$if(biblatex)$
+\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+
+$endif$
+$for(include-after)$
+$include-after$
+
+$endfor$
+\end{document}
