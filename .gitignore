@@ -88,3 +88,5 @@ sympy-plots-for-*.tex/
 # xindy
 *.xdy
 /build/
+/.DS_Store
+/auto/
